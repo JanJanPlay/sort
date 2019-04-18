@@ -1,10 +1,16 @@
 #include "stdio.h"
 
-void PrintArr(int arr[],int left,int right)
+void PrintArr(int arr[],int left,int right,
+				const char *begin=NULL,
+				const char *end=NULL)
 {
+	if(begin)
+		printf("%s\n",begin);
 	for(int i=left;i<right;i++)
 		printf("%d ",arr[i]);
 	printf("\n");
+	if(end)
+		printf("%s\n",end);
 }
 
 void Swap(int &a,int &b)
@@ -17,18 +23,28 @@ void Swap(int &a,int &b)
 int Partition(int arr[],int left,int right)
 {
 	int i = left,j = right;
+	bool change = false;
 	int ref = arr[i];
 
 	while(j>i){
-		while(arr[j]>ref)
+		while(arr[j]>=ref)
 			j--;
-		Swap(arr[i],arr[j]);
+		if(j>i){
+			Swap(arr[i],arr[j]);
+			change = true;
+		}
+		else
+			break;
 
-		while(arr[i]<ref)
+		while(arr[i]<=ref)
 			i++;
-		Swap(arr[i],arr[j]);
+		if(j>i){
+			Swap(arr[i],arr[j]);
+			change = true;
+		}
 	}
-	PrintArr(arr,left,right+1);
+	if(change)
+		PrintArr(arr,left,right+1);
 	return i;
 }
 
@@ -46,16 +62,12 @@ void QuickSort(int arr[],int left,int right)
 
 int main(int argc,char *argv[])
 {
-	int arr[9] = {5,8,6,10,2,4,7,0,3};
+	int arr[] = {5,6,7,8,9,1,2,3,4};
 	int length = sizeof(arr)/sizeof(arr[0]);
 
-	printf("Start:\n");
-	PrintArr(arr,0,length);
-	printf("Process:\n");	
+	PrintArr(arr,0,length,"Start:","Process:");
 	QuickSort(arr,0,length-1);
-
-	printf("Result:\n");
-	PrintArr(arr,0,length);
+	PrintArr(arr,0,length,"Result:");
 	
 	return 0;
 }
